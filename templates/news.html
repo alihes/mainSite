@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>News App Demo</title>
+  <style>
+        html {
+      box-sizing: border-box;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --light-green: #00ff00;
+      --dark-green: #003b00;
+      --dark-grey: #777;
+      --light-grey: #dadce0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a.button {
+      border: 2px solid #004400;
+      color: var(--dark-green);
+      border-radius: 4px;
+      padding: 6px 24px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    a.button:hover {
+      text-decoration: none;
+      background-color: var(--dark-green);
+      color: var(--light-green);
+    }
+
+    input.button{
+      border: 2px solid #004400;
+      color: #ff7b00;
+      border-radius: 4px;
+      padding: 6px 24px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    header {
+      width: 100%;
+      height: 50px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      background-color: var(--light-green);
+      padding: 5px 10px;
+      align-items: center;
+    }
+
+    .logo {
+      color: #002200;
+    }
+
+    form {
+      height: calc(100% - 10px);
+    }
+
+    .search-input {
+      width: 500px;
+      height: 100%;
+      border-radius: 4px;
+      border-color: transparent;
+      background-color: var(--dark-green);
+      color: var(--light-green);
+      font-size: 16px;
+      line-height: 1.4;
+      padding-left: 5px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 20px 40px;
+    }
+
+    .result-count {
+      color: var(--dark-grey);
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .search-results {
+      list-style: none;
+    }
+
+    .news-article {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      border: 1px solid var(--light-grey);
+      padding: 15px;
+      border-radius: 4px;
+      justify-content: space-between;
+    }
+
+    .article-image {
+      width: 200px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-left: 20px;
+    }
+
+    .title {
+      margin-bottom: 15px;
+    }
+
+    .description {
+      color: var(--dark-grey);
+      margin-bottom: 15px;
+    }
+
+    .metadata {
+      display: flex;
+      color: var(--dark-green);
+      font-size: 14px;
+    }
+
+    .published-date::before {
+      content: '\0000a0\002022\0000a0';
+      margin: 0 3px;
+    }
+
+    .pagination {
+      margin-top: 20px;
+    }
+
+    .previous-page {
+      margin-right: 20px;
+    }
+
+    @media screen and (max-width: 550px) {
+      header {
+        flex-direction: column;
+        height: auto;
+        padding-bottom: 10px;
+      }
+
+      .logo {
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+
+      form, .search-input {
+        width: 100%;
+      }
+
+      .github-button {
+        display: none;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .description {
+        font-size: 14px;
+      }
+
+      .article-image {
+        display: none;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="logo" href="/">my first web {{ .Var1 }}</a>
+      <form action="/incr" method="GET">
+        <input class="button" type="submit" value=" + "/>
+      </form>
+      <form action="/decr" method="GET" >
+        <input class="button" type="submit" value=" - "/>
+      </form>
+      <form action="/news/search" method="GET">
+        <input
+          autofocus
+          class="search-input"
+          value="{{ .Query }}"
+          placeholder="fill free"
+          type="search"
+          name="q"/>
+      </form>
+      <a
+        href="https://github.com/alihes"
+        class="button github-button"
+        >my github</a>
+    </header>
+    <section class="container">
+      <div class="result-count">
+        {{ if .Results }}
+          {{if (gt .Results.TotalResults 0)}}
+          <p>
+            About <strong>{{ .Results.TotalResults }}</strong> results were
+            found. You are on page <strong>{{ .CurrentPage }}</strong> of
+            <strong> {{ .TotalPages }}</strong
+            >.
+          </p>
+          {{ else if and (ne .Query "") (eq .Results.TotalResults 0)}}
+          <p>No results found for your query: <strong>{{ .Query }}</strong>.</p>
+          {{ end }}
+        {{ end }}
+      </div>
+      <ul class="search-results"> 
+        {{ range.Results.Articles }}
+        <li class="news-article">
+          <div>
+            <a target="_blank" rel="noreferrer noopener" href="{{.URL}}">
+              <h3 class="title">{{.Title}}</h3>
+            </a>
+            <p class="description">{{ .Description }}</p>
+            <div class="metadata">
+              <p class="source">{{ .Source.Name  }}</p>
+              <time class="published-date">{{ .FormatPublishedDate }}</time>
+            </div>
+          </div>
+          <img class="article-image" src="{{ .URLToImage }}" />
+        </li>
+        {{ end }}
+      </ul>
+      <div class="pagination">
+        {{ if . }}
+          {{ if (gt .NextPage 2) }}
+          <a
+            href="/search?q={{ .Query }}&page={{ .PreviousPage }}"
+            class="button previous-page"
+            >Previous</a
+          >
+          {{ end }}
+          {{ if (ne .IsLastPage true) }}
+          <a
+            href="/search?q={{ .Query }}&page={{ .NextPage }}"
+            class="button next-page"
+            >Next</a
+          >
+          {{ end }}
+        {{ end }}
+        </div>
+    </section>
+  </main>
+</body>
+</html>

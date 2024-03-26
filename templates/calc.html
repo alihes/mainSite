@@ -1,0 +1,159 @@
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>HTML Calculator</title> 
+
+	<!-- For styling -->
+	<style> 
+
+header {
+        width: 100%;
+        height: 50px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        background-color: #00b6ec;
+        padding: 5px 10px;
+        align-items: center;
+        z-index: 10;
+      }
+		table { 
+			/* border: 1px solid black;  */
+            background-color: #ffffff;
+			margin-left: auto; 
+			margin-right: auto; 
+            padding: 30px;
+            /* border: 10px  black; */
+            box-shadow: 0 30px 40px rgba(0,0,0,.3);
+            border-radius: 10%;
+		} 
+		
+		input[type="button"] { 
+			width: 83px;
+			padding: 20px 20px 20px 20px; 
+			color: white; 
+			font-size: 30px; 
+			font-weight: bold; 
+			border: 0px groove #d8ddf0; 
+			border-radius: 100%; 
+            box-shadow: 0 4px px rgba(0,0,0,.2);
+		} 
+
+        /* input[type="button"]:nth-child(1){
+            background-color: #1f2b54;
+        } */
+
+        .button-back{
+			background-color: #d8ddf0; 
+            -webkit-text-fill-color: #747c97;
+        }
+        .button-back-white{
+			background-color: #f5f7ff; 
+            -webkit-text-fill-color: #747c97;
+        }
+        .button-back-c{
+			background-color: #1f2b54; 
+        }
+        .button-back-min{
+			background-color: #ff445a; 
+        }
+        .button-back-div{
+			background-color: #2388ff; 
+        }
+        .button-back-mul{
+			background-color: #ffc804; 
+        }
+        .button-back-sum{
+			background-color: #63de77; 
+        }
+        
+        .centerer{
+            width: 2px;
+            height: 0px;
+            text-align: center;
+         }
+		
+		div[type="text"] { 
+            width: 80%;
+			height: 30px;
+			padding: 20px 30px; 
+			font-size: 30px; 
+			font-weight: bold; 
+			border: none; 
+			border-radius: 50px; 
+			border: 2px groove #2388ff; 
+            background-color: #2388ff;
+            -webkit-text-fill-color: #ffffff;
+            vertical-align: middle;
+            margin-bottom: 10px;
+            
+		} 
+        .back{
+            background-color: #f2f4fd;
+            padding: 10% 10% 10% 10%;
+            margin: auto auto auto auto;
+        }	
+        .nopad{
+            padding: 0px;
+        }
+		.bigFont{
+			font-size: 200%;
+		}
+	</style> 
+	
+</head> 
+
+<body class="back"> 
+	<header>
+		<a class="bigFont" href="/">mainpage</a>
+	</header>
+<div>
+	<!-- Create table -->
+	<table id="calcu" > 
+		<tr> 
+			<td colspan="4"> 
+				<!-- <input type="text" id="result">  -->
+				<div type="text" id="result">{{ .Result }}</div> 
+			</td> 
+		</tr> 
+
+		<tr> 
+			<td class="centerer"><a href="/calc/10"><input class="button-back-white" type="button" value="%"></a></td> 
+			<td class="centerer"><a href="/calc/11"><input class="button-back-white" type="button" value="√"></a></td> 
+			<td class="centerer"><a href="/calc/12"><input class="button-back-white" type="button" value="CE"></a></td> 
+			<td class="centerer"><a href="/calc/13"><input class="button-back-c" type="button" value="C"></a></td> 
+		</tr> 
+		<tr> 
+			<td><a href="/calc/7"><input class="button-back" type="button" value="7"></a></td> 
+			<td><a href="/calc/8"><input class="button-back" type="button" value="8"></a></td> 
+			<td><a href="/calc/9"><input class="button-back" type="button" value="9"></a></td> 
+			<td><a href="/calc/14"><input class="button-back-min" type="button" value="-"></a></td> 
+		</tr> 
+		<tr> 
+			<td><a href="/calc/4"><input class="button-back" type="button" value="4"></a></td> 
+			<td><a href="/calc/5"><input class="button-back" type="button" value="5"></a></td> 
+			<td><a href="/calc/6"><input class="button-back" type="button" value="6"></a></td> 
+			<td><a href="/calc/15"><input class="button-back-div" type="button" value="÷"></a></td> 
+		</tr> 
+		<tr> 
+			<td><a href="/calc/1"><input class="button-back" type="button" value="1"></a></td> 
+			<td><a href="/calc/2"><input class="button-back" type="button" value="2"></a></td> 
+			<td><a href="/calc/3"><input class="button-back" type="button" value="3"></a></td> 
+			<td><a href="/calc/16"><input class="button-back-mul" type="button" value="x"></a></td> 
+		</tr> 
+		<tr> 
+			<td><a href="/calc/"><input class="button-back" type="button" value="."></a></td> 
+			<!-- <td><a href="/calc/17"><input class="button-back" type="button" value="."></a></td>  -->
+			<td><a href="/calc/0"><input class="button-back" type="button" value="0"></a></td> 
+			<td><a href="/calc/18"><input class="button-back-white" type="button" value="="></a></td> 
+			<td><a href="/calc/19"><input class="button-back-sum" type="button" value="+"></a></td> 
+		</tr> 
+	</table> 
+</div>
+</body> 
+
+</html> 
