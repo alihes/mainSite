@@ -70,14 +70,12 @@ func main(){
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", fs))
 	
 //news data
-	apikey := "fa1ced5f40ad4c86b0a9339736aa4d67"
-	myClient := &http.Client{Timeout: 10 * time.Second}
-	newsapi := news.NewClient(myClient, apikey, 20)
 	
 	r.HandleFunc( "/", homePage)
 	r.HandleFunc("/calc/{action}", calcHandler)
+	r.HandleFunc("/news/{rest}", newsInit)
 	r.HandleFunc("/news", newsInit)
-	r.HandleFunc("/news/search", searchHandler(newsapi))
+	// r.HandleFunc("/news/search", searchHandler(newsapi))
 
 	http.ListenAndServe(":8080", r)
 	
@@ -331,31 +329,34 @@ func calcHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func newsInit(w http.ResponseWriter , r *http.Request){
+func newsInit(w http.ResponseWriter, r *http.Request){
+	a := mux.Vars(r)["rest"]
 
+	apikey := "fa1ced5f40ad4c86b0a9339736aa4d67"
+	myClient := &http.Client{Timeout: 10 * time.Second}
+	newsapi := news.NewClient(myClient, apikey, 20)
+	switch a{
+	case "incr":
+		ndata.Var1++
+		
+		buf := &bytes.Buffer{}
+		err := newsTmp.Execute(buf, ndata)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		buf.WriteTo(w)
+	case "decr":
+		ndata.Var1--
+		buf := &bytes.Buffer{}
+		err := newsTmp.Execute(buf, ndata)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	
-	buf := &bytes.Buffer{}
-	err := newsTmp.Execute(buf,nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	buf.WriteTo(w)
-}
-func (s *NData) IsLastPage() bool {
-	return s.NextPage >= s.TotalPages
-}
-func (s *NData) CurrentPage() int {
-	if s.NextPage == 1 {
-		return s.NextPage
-	}
-	return s.NextPage-1
-}
-func (s *NData) PreviousPage() int{
-	return s.CurrentPage()-1
-}
-func searchHandler(newsapi *news.Client) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+		buf.WriteTo(w)
+	case "search":
 		u, err := url.Parse(r.URL.String())
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -408,5 +409,30 @@ func searchHandler(newsapi *news.Client) http.HandlerFunc {
 
 		buf.WriteTo(w)
 
+	default:
+		buf := &bytes.Buffer{}
+		err := newsTmp.Execute(buf,nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		buf.WriteTo(w)
 	}
 }
+func (s *NData) IsLastPage() bool {
+	return s.NextPage >= s.TotalPages
+}
+func (s *NData) CurrentPage() int {
+	if s.NextPage == 1 {
+		return s.NextPage
+	}
+	return s.NextPage-1
+}
+func (s *NData) PreviousPage() int{
+	return s.CurrentPage()-1
+}
+// func searchHandler(newsapi *news.Client) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+		
+// 	}
+// }

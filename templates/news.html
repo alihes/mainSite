@@ -188,6 +188,10 @@
         display: none;
       }
     }
+    .verti{
+        display: flex;
+        flex-direction: row;
+    }
 
   </style>
 </head>
@@ -195,12 +199,14 @@
   <main>
     <header>
       <a class="logo" href="/">my first web {{ .Var1 }}</a>
-      <form action="/incr" method="GET">
-        <input class="button" type="submit" value=" + "/>
-      </form>
-      <form action="/decr" method="GET" >
-        <input class="button" type="submit" value=" - "/>
-      </form>
+      <div class="verti">
+        <form action="/news/incr" method="GET">
+          <input class="button" type="submit" value=" + "/>
+        </form>
+        <form action="/news/decr" method="GET" >
+          <input class="button" type="submit" value=" - "/>
+        </form>
+      </div>
       <form action="/news/search" method="GET">
         <input
           autofocus
